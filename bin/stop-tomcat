@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# This script does a very simple test for checking disk space.
+#space=`df -h | awk '{print $5}' | grep % | grep -v Use | sort -n | tail -1 | cut -d "%" -f1 -`
+
+common2="/Users/stefano/Code/Tomcat/"
+common="ps ax | grep "
+end=" | grep -v grep | awk '{print $1}'"
+
+tomcat=$(find $common2 -maxdepth 1 -type d -iname \*$1\* | head -n1)
+
+#case $1 in
+#  'sportello')
+#     tomcat="TomcatSportello-8080"
+#   ;;
+#   'trentamobile')
+#     tomcat="TomcatTrentaMobile-8080"
+#   ;;
+#   'trenta')
+#     tomcat="TomcatTrenta-80"
+#   ;;
+#   'asf')
+#     tomcat="TomcatASF-8080"
+#   ;;
+#   'gelsia')
+#     tomcat="TomcatGelsia-8080"
+#   ;;
+#   'iso9000')
+#     tomcat="TomcatISO9000qm-8080"
+#   ;;
+#   'rivolta')
+#     tomcat="TomcatRivolta-8080"
+#   ;;
+#   *)
+#     tomcat=""
+#   ;;
+#esac
+
+if [ -z "$tomcat" ]; then
+  echo "invalid tomcat"
+  exit -1
+fi
+
+tomcat=$(echo $tomcat | rev | cut -d/ -f1 | rev)
+
+X=`ps ax | grep $tomcat | grep -v grep | awk '{print $1}'`
+echo "running kill -9 $X"
+sudo kill -9 $X

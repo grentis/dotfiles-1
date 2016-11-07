@@ -1,0 +1,66 @@
+#!/bin/bash
+
+# This script does a very simple test for checking disk space.
+#space=`df -h | awk '{print $5}' | grep % | grep -v Use | sort -n | tail -1 | cut -d "%" -f1 -`
+
+common="/Users/stefano/Code/Tomcat/"
+bin="/webapps/"
+end="/WEB-INF/log/"
+
+tomcat=$(find $common -maxdepth 1 -type d -iname \*$1\* | head -n1)
+
+#case $1 in
+#  'sportello')
+#     tomcat="TomcatSportello-8080"
+#     app="sportello"
+#   ;;
+#   'trentamobile')
+#     tomcat="TomcatTrentaMobile-8080"
+#     app="TrentaMobileDS"
+#   ;;
+#   'asf')
+#     tomcat="TomcatASF-8080"
+#     app="asfportal"
+#   ;;
+#   'gelsia')
+#     tomcat="TomcatGelsia-8080"
+#     app="gelsiaportal"
+#   ;;
+#   'trenta')
+#     tomcat="TomcatTrenta-80"
+#     app="trentacms"
+#   ;;
+#   'iso9000')
+#     tomcat="TomcatISO9000qm-8080"
+#     app="iso9000qm2"
+#   ;;
+#   'rivolta')
+#     tomcat="TomcatRivolta-8080"
+#   ;;
+#   *)
+#     tomcat=""
+#   ;;
+#esac
+
+case $3 in
+  'mvc')
+    log="MVCError.log"
+  ;;
+  *)
+    log="RTXError.log"
+  ;;
+esac
+
+if [ -z "$tomcat" ]; then
+  echo "invalid tomcat"
+  exit -1
+fi
+
+if [ -z "$2" ]; then
+  app="$1"
+else
+  app="$2"
+fi
+
+echo "tail -f $tomcat$bin$app$end$log"
+tail -n 30 -f $tomcat$bin$app$end$log

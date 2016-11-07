@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# This script does a very simple test for checking disk space.
+#space=`df -h | awk '{print $5}' | grep % | grep -v Use | sort -n | tail -1 | cut -d "%" -f1 -`
+
+command="ps ax | grep tomcat | grep -v grep | sed -e 's/.*Djava\.endorsed\.dirs=\(.*\)\/endorsed.*/\1/g' -e 's/.*\/\(.*\)/\1/g'"
+
+echo "running $command"
+res=`ps ax | grep tomcat | grep -v grep | grep -v show-tomcat | sed -e 's/.*Djava\.endorsed\.dirs=\(.*\)\/endorsed.*/\1/g' -e 's/.*\/\(.*\)/\1/g'`
+echo $res
